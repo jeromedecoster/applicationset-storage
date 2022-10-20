@@ -1,0 +1,12 @@
+# https://hub.docker.com/_/node/
+FROM node:18.10-slim AS build
+WORKDIR /app
+ADD package.json .
+RUN npm install
+
+FROM node:18.10-slim
+WORKDIR /app
+COPY --from=build /app .
+ADD . .
+ENV DEBUG=storage
+CMD ["npx", "nodemon", "index.js"]
